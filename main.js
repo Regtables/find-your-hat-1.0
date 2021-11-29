@@ -1,10 +1,12 @@
 const prompt = require('prompt-sync')({sigint: true});
+const term = require('terminal-kit').terminal;
 
-const hat = '^';
-const hole = 'O';
-const fieldCharacter = '░';
-const pathCharacter = '*';
+const hat = term.magenta.str('^');
+const hole = term.red.str('O');
+const fieldCharacter = term.green.str('░');
+const pathCharacter = term.blue.str('*');
 let playing = true;
+
 
 
 class Field {
@@ -38,7 +40,7 @@ class Field {
     //populating with holes('O')
     for(let i = 0; i < amountHoles; i++){
       
-      //to ensure a hole does not created at the same place twice
+      //to ensure a hole does not get created at the same index twice
       while(newField[Xindex][Yindex] === hole){
 
         Xindex = Math.floor(Math.random()*width)
@@ -122,28 +124,28 @@ class Field {
       let move = prompt('What is your move?');
       
       //player moves up
-      if(move === 'u'){
+      if(move === 'w'){
 
         this.positionX -= 1
         this.winLoseCondition();
         this.updatePosition();
 
       //player moves down
-      } else if(move === 'd'){
+      } else if(move === 's'){
 
         this.positionX += 1
         this.winLoseCondition();
         this.updatePosition();
       
       //player moves right
-      } else if(move === 'r'){
+      } else if(move === 'd'){
 
         this.positionY += 1
         this.winLoseCondition();
         this.updatePosition();
       
       //player moves left
-      } else if(move === 'l'){
+      } else if(move === 'a'){
 
         this.positionY -= 1
         this.winLoseCondition(); 
@@ -157,7 +159,7 @@ class Field {
 }
 
 //generate field
-let field = Field.generateField(5, 5, 30);
+let field = Field.generateField(10, 10, 30);
 const myField2 = new Field(field);
 
 //play game
