@@ -65,13 +65,13 @@ class Field {
   }
 
   //generates random starting player position
-  static generateRandomStartingPosition(width, height){
+  static generateRandomStartingPosition(newField){
 
     do{
       //to ensure a hat doesnt get placed on a hole (keeps exact spesified % of holes)
       this.positionX = Math.floor(Math.random()*width)
       this.positionY = Math.floor(Math.random()*height)
-      newField[this.positionX][this.positionY] = pathCharacter;
+      this.field[this.positionX][this.positionY] = pathCharacter;
     }while(newField[this.positionX][this.positionY] === hole || newField[this.positionX][this.positionY] === hat)
   }
 
@@ -98,7 +98,7 @@ class Field {
       console.log('You lost! You you fell in a hole :((((')
       playing = false;
 
-    //Player falls out of bounds / X or Y = negative // current position = undefined
+    //Player falls out of bounds / X or Y = negative / current position = undefined
     } else if(this.field[this.positionX][this.positionY] === undefined){
 
       this.updatePosition();
@@ -114,6 +114,46 @@ class Field {
       console.log('You won! You found your hat :))))')
       playing = false;
     }
+  }
+
+  //validates field to ensure that all generated fields are playable(attemps to solve game). Returns true if solvable and false if not
+  validateField(){
+
+    let invalid = false;
+
+    while(invalid = false){
+
+      //tests x-axis
+      if(this.field[this.positionX+1][this.positionY] === hole || 
+         this.field[this.positionX+1][this.positionY] === undefined ||
+         this.field[this.positionX-1][this.positionY] === hole ||
+         this.field[this.positionX-1][this.positionY] === undefined){
+      
+        this.positionX += 0;
+
+        //tests y-axis
+      } else if(this.field[this.positionX][this.positionY+1] === hole || 
+                this.field[this.positionX][this.positionY+1] === undefined ||
+                this.field[this.positionX][this.positionY-1] === hole ||
+                this.field[this.positionX][this.positionY-1] === undefined){
+       
+        this.positionY += 0;
+      }
+
+      if(this.field[this.positionX+1][this.positionY] === fieldCharacter || 
+         this.field[this.positionX-1][this.positionY] === fieldCharacter){
+         
+         this.positionX += 1;
+
+      } else if(this.field[this.positionX+1][this.positionY] === fieldCharacter || 
+                this.field[this.positionX-1][this.positionY] === fieldCharacter){
+        
+        this.positionX += 1;
+      }
+
+    }
+
+    
   }
 
   //continues to print field and promt for input while user is still alive or has not yet won
